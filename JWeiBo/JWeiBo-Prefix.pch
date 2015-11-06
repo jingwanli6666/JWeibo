@@ -1,0 +1,44 @@
+//
+//  Prefix header
+//
+//  The contents of this file are implicitly included at the beginning of every source file.
+//
+
+#import <Availability.h>
+
+#ifndef __IPHONE_3_0
+#warning "This project uses features only available in iOS SDK 3.0 and later."
+#endif
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+
+//1.判断是否为ios7
+#define IOS7 ([[[UIDevice currentDevice] systemVersion] floatValue] >=7.0 ? YES : NO)
+
+//2.获取RGB颜色
+#define WBColor(r,g,b)  [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1.0]
+
+//3.自定义log
+#ifdef DEBUG
+#define WBLog(...) NSLog(__VA_ARGS__)
+#else
+#define WBLog(...) nil
+#endif
+
+#import "UIImage+Jimg.h"
+#import "NSString+Emoji.h"
+#import "UITextView+Extension.h"
+
+//4.获取随机颜色
+// 随机色
+#define WBRandomColor WBColor(arc4random_uniform(256), arc4random_uniform(256), arc4random_uniform(256))
+
+//通知
+#define  WBSelectedEmotionNotification  @"SelectedEmotionChangedNotification"
+#define  WBSelectedEmotion   @"selectedEmotion"
+
+#endif
+
+
