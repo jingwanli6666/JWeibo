@@ -96,6 +96,7 @@
     if ([self.delegate respondsToSelector:@selector(tabBar:didSelectedButtonFrom:to:)]) {
         [self.delegate tabBar:self didSelectedButtonFrom:self.selectedButton.tag to:button.tag];
     }
+    //2.按钮的切换
     self.selectedButton.selected = NO;
     button.selected = YES;
     self.selectedButton = button;
@@ -125,7 +126,7 @@
         //3.绑定tag
         button.tag = index;
     }
-   }
+}
 
 
 

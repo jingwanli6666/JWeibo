@@ -42,6 +42,9 @@
     [self setupTabbar];
     
     [self setUpAllChildViewController];
+    
+//    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(checkUnreadCount) userInfo:nil repeats:YES];
+//    [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
   
 }
 
@@ -90,21 +93,21 @@
 {
     //首页
     WBhomepageTableViewController *home = [[WBhomepageTableViewController alloc] init];
-    home.tabBarItem.badgeValue = @"10";
+    //home.tabBarItem.badgeValue = @"10";
     [self setUpChildViewControlller:home title:@"首页" imageName:@"tabbar_home" selectedImageName:@"tabbar_home_selected"];
    
     
     WBmessageTableViewController *message = [[WBmessageTableViewController alloc] init];
-    message.tabBarItem.badgeValue = @"890";
+    //message.tabBarItem.badgeValue = @"890";
     [self setUpChildViewControlller:message title:@"消息" imageName:@"tabbar_message_center" selectedImageName:@"tabbar_message_center_selected"];
     
     WBsquareTableViewController *square = [[WBsquareTableViewController alloc] init];
-    square.tabBarItem.badgeValue = @"8";
+    //square.tabBarItem.badgeValue = @"8";
     [self setUpChildViewControlller:square title:@"广场" imageName:@"tabbar_discover" selectedImageName:@"tabbar_discover_selected"];
     
     
     WBuserTableViewController *user = [[WBuserTableViewController alloc] init];
-    user.tabBarItem.badgeValue = @"6";
+    //user.tabBarItem.badgeValue = @"6";
     [self setUpChildViewControlller:user title:@"我" imageName:@"tabbar_profile" selectedImageName:@"tabbar_profile_selected"];
     
 }

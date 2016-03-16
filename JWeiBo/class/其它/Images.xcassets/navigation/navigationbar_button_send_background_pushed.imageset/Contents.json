@@ -2,13 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "navigationbar_button_send_background_pushed.png"
+      "filename" : "navigationbar_button_send_background_pushed.png",
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "scale" : "2x",
-      "filename" : "navigationbar_button_send_background_pushed@2x.png"
+      "filename" : "navigationbar_button_send_background_pushed@2x.png",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
     }
   ],
   "info" : {

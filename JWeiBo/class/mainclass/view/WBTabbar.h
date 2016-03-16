@@ -11,7 +11,7 @@
 @class WBTabbar;
 
 @protocol WbTabBarDelegate <NSObject>
-
+//可选的代理方法
 @optional
 -(void)tabBar:(WBTabbar *)tabBar didSelectedButtonFrom:(int)from to:(int)to;
 -(void)tabBarDidClickPlusButton:(WBTabbar *)tabBar;
@@ -19,8 +19,6 @@
 
 @interface WBTabbar : UIView
 -(void)addTabBarButtonWithItem:(UITabBarItem *)item;
-
-
 @property (nonatomic,weak) id<WbTabBarDelegate> delegate;
 
 

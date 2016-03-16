@@ -18,6 +18,8 @@
 #import "WBStatuesFrame.h"
 #import "MJExtension.h"
 #import "MJRefresh.h"
+#import "WBStatusTool.h"
+#import "WBHttpTool.h"
 
 #define WBTitleButtonDownTag 0
 #define WBTitleButtonUpTag -1
@@ -45,6 +47,7 @@
         _statusFrames = [NSMutableArray array];
     }
     return _statusFrames;
+    [self.tableView indexPathsForVisibleRows]
 }
 
 - (void)viewDidLoad
@@ -105,6 +108,38 @@
         //WBLog(@"%@",statusFrame.statues.idstr);
         params[@"max_id"] = @(maxId);
     }
+    
+    //3.加载沙盒中的数据
+   
+    NSArray *statues = [WBStatusTool statuesWithParams:params];
+    if (statues.count) {
+        //将"微博字典"数组转为 "微博模型"数组
+        NSArray *newStatues = [WBStatuses objectArrayWithKeyValuesArray:statues];
+        NSMutableArray *statuesArr = [NSMutableArray array];
+        //将 WBStatus数组转为WBStatusFrame数组
+        for (WBStatuses *status in newStatues) {
+            //传递数据模型数据
+            WBStatuesFrame *statuesFrame = [[WBStatuesFrame alloc] init];
+            statuesFrame.statues = status;
+            [statuesArr addObject:statuesFrame];
+        }
+        
+        //将最新的数据加到临时数组的最前端
+        NSMutableArray *tempArray = [NSMutableArray array];
+        [tempArray addObjectsFromArray:statuesArr];
+        [tempArray addObjectsFromArray:self.statusFrames];
+        //WBLog(@"%@",tempArray);
+        
+        //赋值
+        self.statusFrames = tempArray;
+        
+        
+        //刷新表格
+        [self.tableView reloadData];
+        
+        //[MBProgressHUD hideHUD];
+        
+    }else{
     //3.放松请求
     [mgr GET:@"https://api.weibo.com/2/statuses/home_timeline.json" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         //NSArray *dictArray = responseObject[@"statuses"];
@@ -121,17 +156,14 @@
         
         //将最新的数据加到statusFrames的后面
         [self.statusFrames addObjectsFromArray:statuesArr];
-        
-        
         //刷新表格
         [self.tableView reloadData];
-        
         [self.tableView.footer endRefreshing];
-        
-        
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         [self.tableView.footer endRefreshing];
-        }];
+    }];
+        
+    }
 
 }
 
@@ -143,7 +175,6 @@
     WBAccount *account = [WBAccountTool getAccount];
     //2.封装请求参数
     AFHTTPRequestOperationManager *mgr = [AFHTTPRequestOperationManager manager];
-    
     NSMutableDictionary *params = [NSMutableDictionary dictionary];
     params[@"access_token"] =account.access_token;
     params[@"count"] = @10;
@@ -151,14 +182,16 @@
         WBStatuesFrame *statusFrame = self.statusFrames[0];
         params[@"since_id"] = statusFrame.statues.idstr;
     }
-         //3.放松请求
-    [mgr GET:@"https://api.weibo.com/2/statuses/home_timeline.json" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        //NSArray *dictArray = responseObject[@"statuses"];
-        NSArray *statusArray = [WBStatuses objectArrayWithKeyValuesArray:responseObject[@"statuses"]];
-        
+    
+    
+    //3.先尝试从数据库中加载微博数据
+    NSArray *statues = [WBStatusTool statuesWithParams:params];
+    if (statues.count) {
+        //将"微博字典"数组转为 "微博模型"数组
+        NSArray *newStatues = [WBStatuses objectArrayWithKeyValuesArray:statues];
         NSMutableArray *statuesArr = [NSMutableArray array];
-        
-        for (WBStatuses *status in statusArray) {
+        //将 WBStatus数组转为WBStatusFrame数组
+        for (WBStatuses *status in newStatues) {
             //传递数据模型数据
             WBStatuesFrame *statuesFrame = [[WBStatuesFrame alloc] init];
             statuesFrame.statues = status;
@@ -184,14 +217,49 @@
         
         //显示最新微博的数量(给用户一些友善的提示)
         [self showNewStatusCount:statuesArr.count];
+
+    }else{
+         //3.放松请求
+        [WBHttpTool getWithURL:@"https://api.weibo.com/2/statuses/home_timeline.json" params:params   success:^( id json) {
+        //NSArray *dictArray = responseObject[@"statuses"];
+        NSArray *statusArray = [WBStatuses objectArrayWithKeyValuesArray:json[@"statuses"]];
         
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSMutableArray *statuesArr = [NSMutableArray array];
+        
+        for (WBStatuses *status in statusArray) {
+            //传递数据模型数据
+            WBStatuesFrame *statuesFrame = [[WBStatuesFrame alloc] init];
+            statuesFrame.statues = status;
+            [statuesArr addObject:statuesFrame];
+        }
+        
+        //将最新的数据加到临时数组的最前端
+        NSMutableArray *tempArray = [NSMutableArray array];
+        [tempArray addObjectsFromArray:statuesArr];
+        [tempArray addObjectsFromArray:self.statusFrames];
+        //WBLog(@"%@",tempArray);
+        
+        //赋值
+        self.statusFrames = tempArray;
+        //刷新表格
+        [self.tableView reloadData];
+        
+        //[MBProgressHUD hideHUD];
+        
+        [freshControl endRefreshing];
+        
+        //显示最新微博的数量(给用户一些友善的提示)
+        [self showNewStatusCount:statuesArr.count];
+        
+        [WBStatusTool saveStatues:json[@"statuses"]];
+        
+    } failure:^( NSError *error) {
         //[MBProgressHUD hideHUD];
         //        WBLog(@"%@",error);
        [freshControl endRefreshing];
     }];
 
-    
+    }
 }
 
 /**

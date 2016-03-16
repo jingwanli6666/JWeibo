@@ -2,13 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "userinfo_navigationbar_arrow_highlighted.png"
+      "filename" : "userinfo_navigationbar_arrow_highlighted.png",
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "scale" : "2x",
-      "filename" : "userinfo_navigationbar_arrow_highlighted@2x.png"
+      "filename" : "userinfo_navigationbar_arrow_highlighted@2x.png",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "scale" : "3x"
     }
   ],
   "info" : {

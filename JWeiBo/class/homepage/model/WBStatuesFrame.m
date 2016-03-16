@@ -16,6 +16,11 @@
 @implementation WBStatuesFrame
 
 
+//-(void)encodeWithCoder:(NSCoder *)encoder
+//{
+//    [encoder encodeObject:self. forKey:<#(nonnull NSString *)#>]
+//}
+
 -(void)setStatues:(WBStatuses *)statues
 {
     _statues  = statues;
