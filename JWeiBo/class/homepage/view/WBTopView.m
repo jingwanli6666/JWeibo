@@ -43,53 +43,60 @@
     if (self) {
         // Initialization code
         self.userInteractionEnabled = YES;
+        self.opaque = NO;
          self.image = [UIImage resizeImageWithName:@"timeline_card_top_background"];
         
         /*** 2.头像 **/
         UIImageView *iconView = [[UIImageView alloc] init];
         [self addSubview:iconView];
         self.iconView = iconView;
+        self.iconView.opaque = NO;
         
         /*** 3.vip头像 **/
         UIImageView *vipView = [[UIImageView alloc] init];
         vipView.contentMode = UIViewContentModeCenter;
         [self addSubview:vipView];
         self.vipView = vipView;
+        self.vipView.opaque = NO;
         
         /*** 4.配图 **/
         WBStatusPhotoView *figureView = [[WBStatusPhotoView alloc] init];
         [self addSubview:figureView];
         self.figureView = figureView;
+        self.figureView.opaque = NO;
         
         /*** 5.昵称 **/
         UILabel *nameLabel = [[UILabel alloc] init];
-        nameLabel.backgroundColor = [UIColor clearColor];
+        //nameLabel.backgroundColor = [UIColor clearColor];
         nameLabel.font = WBStatuesnameFont;
         [self addSubview:nameLabel];
         self.nameLabel = nameLabel;
+        self.nameLabel.opaque = NO;
         
         /*** 6.时间 **/
         UILabel *timeLabel = [[UILabel alloc] init];
-        timeLabel.backgroundColor = [UIColor clearColor];
+        //timeLabel.backgroundColor = [UIColor clearColor];
         timeLabel.textColor = WBColor(240, 145, 19);
         timeLabel.font = WBtimeFont;
         [self addSubview:timeLabel];
         self.timeLabel = timeLabel;
+        self.timeLabel.opaque = NO;
         
         /*** 7.来源 **/
         UILabel *sourceLabel = [[UILabel alloc] init];
-        sourceLabel.backgroundColor = [UIColor clearColor];
+        //sourceLabel.backgroundColor = [UIColor clearColor];
         sourceLabel.font = WBsourceFont;
         [self addSubview:sourceLabel];
         self.sourceLabel = sourceLabel;
         
         /*** 8.正文 **/
         UILabel *contentLabel = [[UILabel alloc] init];
-        contentLabel.backgroundColor = [UIColor clearColor];
+        //contentLabel.backgroundColor = [UIColor clearColor];
         contentLabel.font = WBcontentFont;
         contentLabel.numberOfLines = 0;
         [self addSubview:contentLabel];
         self.contentLabel = contentLabel;
+        self.contentLabel.opaque = NO;
     }
     return self;
 }
@@ -129,7 +136,7 @@
     //5.时间
     self.timeLabel.text = statues.created_at;
 //    WBLog(@"%@",statues.created_at);
-    //self.timeLabel.textColor = [UIColor orangeColor];
+    self.timeLabel.textColor = [UIColor orangeColor];
     CGFloat timeLabelX =  self.statuesframe.nameLabelF.origin.x;
     CGFloat timeLabelY = CGRectGetMaxY(self.statuesframe.topViewF)- 4*WBStatuesboarder;
     CGSize timeSize = [statues.created_at sizeWithFont:WBtimeFont];

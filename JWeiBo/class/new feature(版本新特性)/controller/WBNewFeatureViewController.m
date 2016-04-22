@@ -7,7 +7,8 @@
 //
 
 #import "WBNewFeatureViewController.h"
-#import "WBTabBarViewController.h"
+//#import "WBTabBarViewController.h"
+#import "WBLockViewController.h"
 #define WBNewFeatureImageNum 3
 
 @interface WBNewFeatureViewController ()<UIScrollViewDelegate>
@@ -131,7 +132,7 @@
     UIButton *button = [[UIButton alloc] init];
     
     //2.设置文字
-    [button setTitle:@"开始微博" forState:UIControlStateNormal];
+    [button setTitle:@"设置手势密码" forState:UIControlStateNormal];
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [button setBackgroundImage:[UIImage imageWithName:@"new_feature_finish_button"] forState:UIControlStateNormal];
     [button setBackgroundImage:[UIImage imageWithName:@"new_feature_finish_button_highlighted"] forState:UIControlStateHighlighted];
@@ -169,7 +170,7 @@
 -(void)startWB
 {
     //切换窗口
-    self.view.window.rootViewController = [[WBTabBarViewController alloc] init];
+    self.view.window.rootViewController = [[WBLockViewController alloc] init];
 }
 
 -(void)checkboxClick:(UIButton *)checkbox

@@ -20,6 +20,7 @@
 #import "MJRefresh.h"
 #import "WBStatusTool.h"
 #import "WBHttpTool.h"
+#import "WBWeakProxy.h"
 
 #define WBTitleButtonDownTag 0
 #define WBTitleButtonUpTag -1
@@ -47,7 +48,6 @@
         _statusFrames = [NSMutableArray array];
     }
     return _statusFrames;
-    [self.tableView indexPathsForVisibleRows]
 }
 
 - (void)viewDidLoad
@@ -141,25 +141,31 @@
         
     }else{
     //3.放松请求
-    [mgr GET:@"https://api.weibo.com/2/statuses/home_timeline.json" parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        //NSArray *dictArray = responseObject[@"statuses"];
-        NSArray *statusArray = [WBStatuses objectArrayWithKeyValuesArray:responseObject[@"statuses"]];
-        
-        NSMutableArray *statuesArr = [NSMutableArray array];
-        
-        for (WBStatuses *status in statusArray) {
-            //传递数据模型数据
-            WBStatuesFrame *statuesFrame = [[WBStatuesFrame alloc] init];
-            statuesFrame.statues = status;
-            [statuesArr addObject:statuesFrame];
-        }
-        
-        //将最新的数据加到statusFrames的后面
-        [self.statusFrames addObjectsFromArray:statuesArr];
-        //刷新表格
-        [self.tableView reloadData];
+        [WBHttpTool getWithURL:@"https://api.weibo.com/2/statuses/home_timeline.json" params:params   success:^( id json) {
+            //NSArray *dictArray = responseObject[@"statuses"];
+            NSArray *statusArray = [WBStatuses objectArrayWithKeyValuesArray:json[@"statuses"]];
+            
+            NSMutableArray *statuesArr = [NSMutableArray array];
+            
+            for (WBStatuses *status in statusArray) {
+                //传递数据模型数据
+                WBStatuesFrame *statuesFrame = [[WBStatuesFrame alloc] init];
+                statuesFrame.statues = status;
+                [statuesArr addObject:statuesFrame];
+            }
+            
+            //将最新的数据加到临时数组的最前端
+            NSMutableArray *tempArray = [NSMutableArray array];
+            [tempArray addObjectsFromArray:statuesArr];
+            [tempArray addObjectsFromArray:self.statusFrames];
+            //WBLog(@"%@",tempArray);
+            
+            //赋值
+            self.statusFrames = tempArray;
+            //刷新表格
+            [self.tableView reloadData];
         [self.tableView.footer endRefreshing];
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+    } failure:^(NSError *error) {
         [self.tableView.footer endRefreshing];
     }];
         

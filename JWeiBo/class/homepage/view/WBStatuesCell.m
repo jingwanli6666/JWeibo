@@ -35,6 +35,7 @@
     WBStatuesCell *statuescell = [tableView dequeueReusableCellWithIdentifier:ID];
     if (statuescell == nil) {
         statuescell = [[WBStatuesCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:ID];
+        statuescell.opaque = NO;
     }
     return statuescell;
 }
@@ -78,7 +79,7 @@
     WBTopView *topView = [[WBTopView alloc] init];
     self.selectedBackgroundView = [[UIView alloc] init];
     
-    self.backgroundColor = [UIColor clearColor];
+    //self.backgroundColor = [UIColor clearColor];
     [self.contentView addSubview:topView];
     self.topView = topView;
     

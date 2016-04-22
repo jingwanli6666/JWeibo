@@ -164,7 +164,7 @@
 
 -(void)deleteDidChange
 {
-    WBLog(@"删除按钮按下了");
+    //WBLog(@"删除按钮按下了");
     [self.textView deleteBackward];
 }
 

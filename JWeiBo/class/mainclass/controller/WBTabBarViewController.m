@@ -8,7 +8,8 @@
 
 #import "WBTabBarViewController.h"
 #import "WBhomepageTableViewController.h"
-#import "WBmessageTableViewController.h"
+//#import "WBmessageTableViewController.h"
+#import "WBServiceViewController.h"
 #import "WBsquareTableViewController.h"
 #import "WBuserTableViewController.h"
 #import "UIImage+Jimg.h"
@@ -97,9 +98,9 @@
     [self setUpChildViewControlller:home title:@"首页" imageName:@"tabbar_home" selectedImageName:@"tabbar_home_selected"];
    
     
-    WBmessageTableViewController *message = [[WBmessageTableViewController alloc] init];
+    WBServiceViewController *service = [[WBServiceViewController alloc] init];
     //message.tabBarItem.badgeValue = @"890";
-    [self setUpChildViewControlller:message title:@"消息" imageName:@"tabbar_message_center" selectedImageName:@"tabbar_message_center_selected"];
+    [self setUpChildViewControlller:service title:@"消息" imageName:@"tabbar_message_center" selectedImageName:@"tabbar_message_center_selected"];
     
     WBsquareTableViewController *square = [[WBsquareTableViewController alloc] init];
     //square.tabBarItem.badgeValue = @"8";

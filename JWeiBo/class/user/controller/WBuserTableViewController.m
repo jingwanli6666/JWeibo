@@ -7,6 +7,11 @@
 //
 
 #import "WBuserTableViewController.h"
+#import "WBUserTableViewCell.h"
+#import "WBUserTableViewCellModel.h"
+#import "WBUserTableViewHeader.h"
+#import "WBAssetTableViewController.h"
+#import "WBLockViewController.h"
 
 @interface WBuserTableViewController ()
 
@@ -27,7 +32,17 @@
 {
     [super viewDidLoad];
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"设置" style:UIBarButtonItemStyleDone target:nil action:nil];
+    self.sectionsNumber = 3;
+    self.cellClass = [WBUserTableViewCell class];
+    
+    [self setupModel];
+    
+    WBUserTableViewHeader *tableheader = [[WBUserTableViewHeader alloc] init];
+    tableheader.iconHeadView.image = [UIImage imageNamed:@"tmall_icon"];
+    self.tableView.tableHeaderView = tableheader;
+    
+    
+    //self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"设置" style:UIBarButtonItemStyleDone target:nil action:nil];
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -36,38 +51,52 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
-- (void)didReceiveMemoryWarning
+- (void)setupModel
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    //section 0 model
+    WBUserTableViewCellModel *model01 = [WBUserTableViewCellModel modelWithTitle:@"余额宝" iconImageName:@"20000032Icon" destinationControllerClass:[WBAssetTableViewController class]];
+    
+    WBUserTableViewCellModel *model02= [WBUserTableViewCellModel modelWithTitle:@"招财宝" iconImageName:@"20000059Icon" destinationControllerClass:[WBBasicTableViewController class]];
+    
+    WBUserTableViewCellModel *model03 = [WBUserTableViewCellModel modelWithTitle:@"娱乐宝" iconImageName:@"20000077Icon" destinationControllerClass:[WBBasicTableViewController class]];
+    
+    // section 1 的model
+    WBUserTableViewCellModel *model11 = [WBUserTableViewCellModel modelWithTitle:@"芝麻信用分" iconImageName:@"20000118Icon" destinationControllerClass:[WBBasicTableViewController class]];
+    
+    WBUserTableViewCellModel *model12 = [WBUserTableViewCellModel modelWithTitle:@"随身贷" iconImageName:@"20000180Icon" destinationControllerClass:[WBBasicTableViewController class]];
+    
+    WBUserTableViewCellModel *model13 = [WBUserTableViewCellModel modelWithTitle:@"我的保障" iconImageName:@"20000110Icon" destinationControllerClass:[WBLockViewController class]];
+    
+    // section 2 的model
+    WBUserTableViewCellModel *model21 = [WBUserTableViewCellModel modelWithTitle:@"爱心捐赠" iconImageName:@"09999978Icon" destinationControllerClass:[WBBasicTableViewController class]];
+    
+    self.dataArray = @[@[model01, model02, model03],
+                       @[model11, model12, model13],
+                       @[model21]
+                       ];
+
 }
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-#warning Potentially incomplete method implementation.
-    // Return the number of sections.
-    return 0;
+    WBUserTableViewCellModel *model = [self.dataArray[indexPath.section] objectAtIndex:indexPath.row];
+    
+    UIViewController *vc = [[model.destinationControllerClass alloc] init];
+    vc.title = model.title;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-#warning Incomplete method implementation.
-    // Return the number of rows in the section.
-    return 0;
+    return 20;
 }
 
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
-    
-    // Configure the cell...
-    
-    return cell;
+    return (section == self.dataArray.count -1)? 10:0;
 }
-*/
 
 /*
 // Override to support conditional editing of the table view.

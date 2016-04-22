@@ -33,6 +33,7 @@
     if (self) {
         // Initialization code
         self.userInteractionEnabled = YES;
+        self.opaque = NO;
         self.image = [UIImage resizeImageWithName:@"timeline_retweet_background" left:0.95 top:0.8];
         
         /*** 2.转发微博原作者的昵称 **/

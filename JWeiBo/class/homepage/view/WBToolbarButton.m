@@ -43,12 +43,14 @@
     if (self) {
         // Initialization code
         //1.设置
+        self.opaque = NO;
         self.image = [UIImage resizeImageWithName:@"timeline_card_bottom_backgroud"];
     
         self.highlightedImage = [UIImage imageWithName:@"timeline_card_bottom_backgroud_highlighted"];
         self.userInteractionEnabled = YES;
         
         //2.设置button
+        self.reweetedBtn.opaque = NO;
        self.reweetedBtn =  [self ToolBarWithTitle:@"转发" img:@"toolbar_icon_comment" bkgimage:@"timeline_card_leftbottom_highlighted"];
         
        self.commentBtn =  [self ToolBarWithTitle:@"评论" img:@"toolbar_icon_retweet" bkgimage:@"timeline_card_middlebottom_highlighted"];

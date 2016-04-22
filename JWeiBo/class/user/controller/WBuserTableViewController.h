@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "WBBasicTableViewController.h"
 
-@interface WBuserTableViewController : UITableViewController
+@interface WBuserTableViewController : WBBasicTableViewController
 
 @end

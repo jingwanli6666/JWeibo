@@ -8,8 +8,15 @@
 
 #import "WBsquareTableViewController.h"
 #import "WBSearchBar.h"
+#import "WBSquareTableViewHeaderItemModel.h"
+#import "WBSquareTableViewHeader.h"
+#import "WBSquareTableViewCell.h"
+#import "WBSquareTableViewCellModel.h"
+#import "UIView+WBExtension.h"
 
 @interface WBsquareTableViewController ()
+
+@property (nonatomic, strong) NSArray *headerDataArray;
 
 @end
 
@@ -30,11 +37,19 @@
     
     
   
+    self.sectionsNumber = 2;
     WBSearchBar *searchbar =[WBSearchBar searchBar];
     searchbar.frame = CGRectMake(0, 0, 300, 30);
     
     self.navigationItem.titleView = searchbar;
     
+    self.cellClass = [WBSquareTableViewCell class];
+    
+    [self setupHeader];
+    
+    [self setupModel];
+    
+  //  self.sectionsNumber = self.dataArray.count;
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -43,76 +58,72 @@
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
-- (void)didReceiveMemoryWarning
+- (void)setupHeader
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-#pragma mark - Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-#warning Potentially incomplete method implementation.
-    // Return the number of sections.
-    return 0;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-#warning Incomplete method implementation.
-    // Return the number of rows in the section.
-    return 0;
-}
-
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
+    WBSquareTableViewHeaderItemModel *model0 = [WBSquareTableViewHeaderItemModel modelWithTitle:@"红包" imageName:@"adw_icon_apcoupon_normal" destinationControllerClass:[WBBasicTableViewController class]];
     
-    // Configure the cell...
+    WBSquareTableViewHeaderItemModel *model1 = [WBSquareTableViewHeaderItemModel modelWithTitle:@"电子券" imageName:@"adw_icon_coupon_normal" destinationControllerClass:[WBBasicTableViewController class]];
     
-    return cell;
+    WBSquareTableViewHeaderItemModel *model2 = [WBSquareTableViewHeaderItemModel modelWithTitle:@"行程单" imageName:@"adw_icon_travel_normal" destinationControllerClass:[WBBasicTableViewController class]];
+    
+    WBSquareTableViewHeaderItemModel *model3 = [WBSquareTableViewHeaderItemModel modelWithTitle:@"会员卡" imageName:@"adw_icon_membercard_normal" destinationControllerClass:[WBBasicTableViewController class]];
+    
+    self.headerDataArray = @[model0, model1, model2, model3];
+    
+    
+    WBSquareTableViewHeader *squareHeader = [[WBSquareTableViewHeader alloc] init];
+    squareHeader.wb_height = 90;
+    squareHeader.headerItemModelsArray = self.headerDataArray;
+    __weak typeof(self) weakSelf = self;
+    squareHeader.buttonClickHandler = ^(NSInteger index){
+        WBSquareTableViewHeaderItemModel *model = weakSelf.headerDataArray[index];
+        UIViewController *vc = [[model.destinationControllerClass alloc] init];
+        vc.title = model.title;
+        [weakSelf.navigationController pushViewController:vc animated:YES];
+    };
+    self.tableView.tableHeaderView = squareHeader;
 }
-*/
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)setupModel
 {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
+    // section 0 的model
+    WBSquareTableViewCellModel *model01 = [WBSquareTableViewCellModel modelWithTitle:@"淘宝电影" iconImageName:@"adw_icon_movie_normal" destinationControllerClass:[WBBasicTableViewController class]];
+    
+    WBSquareTableViewCellModel *model02 = [WBSquareTableViewCellModel modelWithTitle:@"快抢" iconImageName:@"adw_icon_flashsales_normal" destinationControllerClass:[WBBasicTableViewController class]];
+    
+    WBSquareTableViewCellModel *model03 = [WBSquareTableViewCellModel modelWithTitle:@"快的打车" iconImageName:@"adw_icon_taxi_normal" destinationControllerClass:[WBBasicTableViewController class]];
+    
+    // section 1 的model
+    WBSquareTableViewCellModel *model11 = [WBSquareTableViewCellModel modelWithTitle:@"我的朋友" iconImageName:@"adw_icon_contact_normal" destinationControllerClass:[WBBasicTableViewController class]];
+    
+    
+    
+    self.dataArray = @[@[model01, model02, model03],
+                       @[model11]
+                       ];
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
 }
-*/
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
+#pragma mark - delegate
 
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
+    WBSquareTableViewCellModel *model = [self.dataArray[indexPath.section] objectAtIndex:indexPath.row];
+    UIViewController *vc = [[model.destinationControllerClass alloc] init];
+    vc.title = model.title;
+    [self.navigationController pushViewController:vc animated:YES];
 }
-*/
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 20;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return (section == self.dataArray.count - 1) ? 10 : 0;
+}
+
 
 /*
 #pragma mark - Navigation

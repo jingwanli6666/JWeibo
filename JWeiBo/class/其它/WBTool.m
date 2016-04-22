@@ -9,6 +9,9 @@
 #import "WBTool.h"
 #import "WBTabBarViewController.h"
 #import "WBNewFeatureViewController.h"
+#import "WBLockViewController.h"
+#import "WBArchiveTool.h"
+#import "CoreLockConst.h"
 
 @implementation WBTool
 
@@ -22,8 +25,21 @@
     NSString *LastVersion = [defaults stringForKey:@"LastVersion"];
     
     if ([currentVesion isEqualToString:LastVersion]) {
-        WBTabBarViewController *tabbarviewcontroller = [[WBTabBarViewController alloc] init];
-        [UIApplication sharedApplication].keyWindow.rootViewController = tabbarviewcontroller;
+       
+        //[UIApplication sharedApplication].keyWindow.rootViewController = tabbarviewcontroller;
+        WBLockViewController *lockviewController = [[WBLockViewController alloc] init];
+        
+        if (![WBArchiveTool hasPwd]) {
+            lockviewController.type = LockTypeSetPwd;
+            lockviewController.msg = CoreLockPWDTitleFirst;
+        }else{
+            lockviewController.type = LockTypeVeryfiPwd;
+            lockviewController.msg = CoreLockVerifyNormalTitle;
+        }
+        
+        
+            [UIApplication sharedApplication].keyWindow.rootViewController = lockviewController;
+        
     }else{
         
         WBNewFeatureViewController *newFeatureviewcontroller = [[WBNewFeatureViewController alloc] init];

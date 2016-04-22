@@ -6,8 +6,8 @@
 //  Copyright (c) 2015年 bcc_cae. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "WBBasicTableViewController.h"
 
-@interface WBsquareTableViewController : UITableViewController
+@interface WBsquareTableViewController :WBBasicTableViewController
 
 @end
